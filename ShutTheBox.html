@@ -1,0 +1,143 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Shut The Box</title>
+		
+		<link rel="stylesheet" href="ShutTheBox.css">
+	</head>
+	<body>
+
+
+		<div id="title"><b>Shut The Box</b></div><br>
+		
+		<div id="numberKeys">
+			<input type="button" class="numberButton" id="Number1" value= 1 onclick="buttonUsed(this)">
+			<input type="button" class="numberButton" id="Number2" value= 2 onclick="buttonUsed(this)">
+			<input type="button" class="numberButton" id="Number3" value= 3 onclick="buttonUsed(this)">
+			<input type="button" class="numberButton" id="Number4" value= 4 onclick="buttonUsed(this)">
+			<input type="button" class="numberButton" id="Number5" value= 5 onclick="buttonUsed(this)">
+			<input type="button" class="numberButton" id="Number6" value= 6 onclick="buttonUsed(this)">
+			<input type="button" class="numberButton" id="Number7" value= 7 onclick="buttonUsed(this)">
+			<input type="button" class="numberButton" id="Number8" value= 8 onclick="buttonUsed(this)">
+			<input type="button" class="numberButton" id="Number9" value= 9 onclick="buttonUsed(this)">
+		</div>
+		
+		<div id="diceSystem">The number is: <span id="randomNumber">0</span><br></div>
+
+		<div id="menuKeys">
+			<input type="button" class="menuButton" id="resetgame" value="Reset Game" onclick="resetGame(this)">
+			<input type="button" class="menuButton" id="checkgame" value="Check Game" onclick="checkGame(this)">
+			<input type="button" class="menuButton" id="checkscore" value="Check Total" onclick="checkTotal()">
+			<input type="button" class="menuButton" id="numberGenerator" value="Generate Number" onclick="numberGen(this)">
+		</div>
+
+		<div id="instructions">
+		<b>How to Play Shut The Box:</b><br>
+		1. Click on the generate number button<br><br>
+		2. Create the total needed by using the number buttons<br><br>
+		3. Once you have made the total, click on the check total button and see if you have it correct<br><br>
+		4. If it is correct the buttons will be disabled, if wrong the buttons will be re-enabled and you need to try again<br><br>
+		5. Keep on repeating this process until you have either won the game or you can longer play<br><br>
+		Won. If you have disabled all the buttons click the check game button and it will alert you have won and reset the game<br><br>
+		Lost. If you have still got buttons left bt can't do anything then click the reset game button and the game will reset itself<br><br>
+		</div>
+
+		<script lang = "JavaScript">
+
+			//Flag Array used to stop the buttons from being used again by the user
+			numberUsed = [2,0,0,0,0,0,0,0,0,0];
+			buttDisabled= ["2","Number1","Number2","Number3","Number4", "Number5", "Number6", "Number7", "Number8", "Number9"]
+			guessTotal = 0;
+			genNumber = 0;
+
+			//Function allows the user to click on the buttons and the array will change in the background
+			function buttonUsed (button) {
+				if(numberUsed[button.value] == 0) {
+					console.log ("The number " + button.value + " was selected");
+					guessTotal = guessTotal + parseInt(button.value);
+					console.log ("The current total is "+ guessTotal);
+					numberUsed[button.value] = 1;
+					console.log ("Before check "+ numberUsed);
+					button.disabled = true;
+				}
+				else {}
+			}
+
+			//Function runs a check process when the check button is clicked on
+			//If the check is true, the button will be disabled permanently, if false, button will be re-enabled
+			function checkTotal() {
+				console.log("Check button is clicked")
+				if(guessTotal == genNumber) {
+					indexcount=0;
+					while(indexcount<numberUsed.length) {
+						if(numberUsed[indexcount]==1) {
+							numberUsed[indexcount]=2;
+							console.log("Guess total is right")
+							console.log("After check "+ numberUsed)
+						}
+						else {}
+						indexcount++;
+					}
+				}
+				else {
+					indexcount=0;
+					while(indexcount<numberUsed.length) {
+						if(numberUsed[indexcount]==1) {
+							numberUsed[indexcount]=0;
+							console.log("Guess total is wrong")
+							console.log("After check "+ numberUsed)
+							tempButt=document.getElementById(buttDisabled[indexcount]);
+							tempButt.disabled=false;
+						}
+						else {}
+						indexcount++;
+					}
+				}
+				guessTotal = 0
+			}
+
+			//Function produces the random number between 2 and 12 to the user when the button is clicked on
+			function numberGen (button) {
+				numberMin = 2
+				numberMax = 12
+				
+				genNumber=Math.floor(Math.random() * (numberMax - numberMin)) + numberMin;
+				document.getElementById("randomNumber").innerHTML = genNumber;
+				console.log("The random number is "+ genNumber)
+			}
+			
+			//Function runs a background check to see if the game is still in play when the user clicks the button
+			//If the game is still in play the user is alerted, if the user has won the game they are alerted and the game resets
+			function checkGame(button) {
+
+				checkCount=0;
+				checkValue=0;
+
+				while(checkCount < 10){
+					if (numberUsed[checkCount]==0){
+					checkValue=checkValue+checkCount;
+					}
+
+					else {}
+
+					checkCount++;
+				}
+
+				if(checkValue == 0) {
+					alert ("Congratulations, you have managed to Shut The Box");
+					location.reload();
+				}
+
+				else {
+					alert ("Game is still in play, please continue to play");
+				}
+
+			}
+
+			//Function resets the game when the user clicks on the button
+			function resetGame(button) {
+				location.reload();
+			}
+		</script>
+	</body>
+</html>
